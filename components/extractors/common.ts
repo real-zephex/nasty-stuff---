@@ -9,21 +9,32 @@ interface rhe {
 }
 
 const RawHtmlExtractor = async ({ url }: { url: string }): Promise<rhe> => {
-  const res = await fetch(url, { headers, method: "GET" });
-  if (!res.ok) {
-    console.error("Something happened here - 2 !");
+  try {
+    const res = await fetch(
+      `https://goodproxy.goodproxy.workers.dev/fetch?url=${url}`,
+      { headers, method: "GET" }
+    );
+    if (!res.ok) {
+      console.error("Something happened here - 2 !");
+      return {
+        status: false,
+        html: null,
+      };
+    }
+
+    const text = await res.text();
+
+    return {
+      status: true,
+      html: text,
+    };
+  } catch (error) {
+    console.error(error);
     return {
       status: false,
       html: null,
     };
   }
-
-  const text = await res.text();
-
-  return {
-    status: true,
-    html: text,
-  };
 };
 
 export default RawHtmlExtractor;

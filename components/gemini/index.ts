@@ -163,13 +163,18 @@ const newsExtractor = async ({ props }: { props: props }) => {
     },
   ];
 
-  const response = await ai.models.generateContent({
-    model,
-    config,
-    contents,
-  });
-  const parsed = JSON.parse(response.text!);
-  return parsed;
+  try {
+    const response = await ai.models.generateContent({
+      model,
+      config,
+      contents,
+    });
+    const parsed = JSON.parse(response.text!);
+    return parsed;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
 };
 
 export default newsExtractor;
